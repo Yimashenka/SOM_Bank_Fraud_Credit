@@ -5,7 +5,8 @@
 # IMPORTING THE LIBRAIRIES
 from matplotlib.pylab import bone, pcolor, colorbar, plot, show
 from som_training import som
-from preprocessing_data import X, Y
+from preprocessing_data import X, Y, sc
+import numpy as np
 
 
 # First we need to initialize the figure, that is the window that will contain
@@ -36,4 +37,24 @@ for i, x in enumerate(X):
        markersize=10,
        markeredgewidth=2
        )
-show()
+#show()
+
+# Getting all id of potential frauders, with more than 90% accuracy.
+sdm = som.distance_map()
+mappings = som.win_map(X)
+fraudster_coords = []
+fraudsters = np.array([])
+threshold = 0.9
+for k in range(sdm.size):
+    i = k % sdm.shape[0]
+    j = k // sdm.shape[1]
+    if sdm[i, j] >= threshold \
+            and len(mappings[(i, j)]):
+        fraudster_coords.append((i, j))
+
+fraudsters = \
+    np.concatenate(
+        ([mappings[(i, j)] for (i, j) in fraudster_coords]),
+        axis=0)
+
+fids = set([f[0] for f in sc.inverse_transform(fraudsters)])
