@@ -39,12 +39,12 @@ for i, x in enumerate(X):
        )
 #show()
 
-# Getting all id of potential frauders, with more than 90% accuracy.
+# Getting all id of potential frauders, with more than 85% here.
 sdm = som.distance_map()
 mappings = som.win_map(X)
 fraudster_coords = []
 fraudsters = np.array([])
-threshold = 0.9
+threshold = 0.85
 for k in range(sdm.size):
     i = k % sdm.shape[0]
     j = k // sdm.shape[1]
